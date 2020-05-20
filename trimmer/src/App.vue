@@ -1,17 +1,17 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <img id="logo" alt="Vue logo" src="./assets/logo.png">
+    <Trimmer msg="Welcome to Trimmer App"/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import Trimmer from './components/Trimmer.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    Trimmer
   }
 }
 </script>
@@ -24,5 +24,9 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+#logo {
+  width: 300px;
+  height: auto;
 }
 </style>
