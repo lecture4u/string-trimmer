@@ -38,8 +38,8 @@
             }
         },
         methods: {
-            onPaste (evt) {
-                var clipboardData, pastedData
+            async onPaste (evt) {
+                let clipboardData, pastedData
                 evt.stopPropagation()
                 evt.preventDefault()
                 clipboardData = evt.clipboardData
@@ -47,7 +47,8 @@
 
                 //assign and render
                 this.rawText = pastedData
-                this.trimmedText = this.trim()
+                this.trimmedText = await this.trim()
+                alert(this.trimmedText.valueOf())
             },
             onCopy(evt) {
                 alert("You just copied: " + evt.text)
@@ -55,8 +56,9 @@
             onError(evt) {
                 alert("failed to copy texts " + evt.text)
             },
-            trim() {
-               return this.rawText
+            async trim() {
+                let strToTrim = this.rawText
+                return strToTrim.replace(/\n|\r/gi, ' ')
             }
         }
     }
