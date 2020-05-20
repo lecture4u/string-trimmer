@@ -10,13 +10,16 @@
                 <div>
                     <input id="userInput" type="text" @paste="this.onPaste" v-model="rawText">
                 </div>
-                <h3>Here't the result</h3>
+                <h3>Here's the result</h3>
                 <div>
-                    <textarea name="resultText" id="resultText" cols="80" rows="30" v-model="trimmedText"></textarea>
+                    <button id="submit" type="button" v-clipboard:copy="trimmedText" v-clipboard:success="this.onCopy" v-clipboard:error="this.onError">COPY</button>
+                    <p id="status">
+                        {{copyStatus}}
+                    </p>
                 </div>
-            </div>
-            <div>
-                <button id="submit" v-clipboard:copy="this.trimmedText" v-clipboard:success="onCopy" v-clipboard:error="onError">TRIM IT!</button>
+                <div>
+                    <textarea disabled name="resultText" id="resultText" cols="80" rows="30" v-model="trimmedText"></textarea>
+                </div>
             </div>
         </div>
     </div>
@@ -24,7 +27,7 @@
 
 <script>
     export default {
-        name: 'HelloWorld',
+        name: 'Trimmer',
         props: {
             msg: String
         },
@@ -34,7 +37,8 @@
         data() {
             return {
                 rawText: "",
-                trimmedText: ""
+                trimmedText: "",
+                copyStatus: ""
             }
         },
         methods: {
@@ -47,18 +51,26 @@
 
                 //assign and render
                 this.rawText = pastedData
-                this.trimmedText = await this.trim()
-                alert(this.trimmedText.valueOf())
+                this.trimmedText = await this.trim(this.rawText)
+                this.$emit('click')
+            },
+            trim(toTrim) {
+                return new Promise((resolve => {
+                    let strToTrim = toTrim
+                    resolve (strToTrim.replace(/\n|\r/gi, ' '))
+                }))
             },
             onCopy(evt) {
-                alert("You just copied: " + evt.text)
+                this.copyStatus = "< COPIED! >"
+                setTimeout(() => {
+                    this.copyStatus = ""
+                }, 1500)
+                this.rawText = ''
+                this.trimmedText = ''
+                return evt
             },
             onError(evt) {
-                alert("failed to copy texts " + evt.text)
-            },
-            async trim() {
-                let strToTrim = this.rawText
-                return strToTrim.replace(/\n|\r/gi, ' ')
+                alert('Failed to copy texts' + evt)
             }
         }
     }
@@ -83,6 +95,7 @@
     a {
         color: #42b983;
     }
+
     #container {
         justify-content: flex-start;
     }
@@ -116,6 +129,7 @@
         background-color: #2c3e50;
         color: white;
         padding: 15px;
+        margin: 15px;
         font-size: 14px;
     }
 </style>
