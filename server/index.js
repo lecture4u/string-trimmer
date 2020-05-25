@@ -6,6 +6,6 @@ app.get('/', (req, res) => {
     res.render('./dist/index.html')
 })
 
-let server = app.listen(3000, () => {
-    console.log("express server has started on port 3000")
+let server = app.listen(5134, () => {
+    console.log("express server has started on port 5134")
 })
